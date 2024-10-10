@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -49,7 +50,6 @@ public class LoanController {
                 .orElseThrow(() -> new NoSuchElementException("Book not found with id " + inputLoan.getBookId()));
         LocalDate returnDate = inputLoan.getReturnDate();
 
-        // Manda as informações para o serviço criar o empréstimo.
         Loan createdLoan = service.createLoan(
                 user.getId(),
                 book.getId(),
@@ -57,6 +57,26 @@ public class LoanController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLoan);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Loan> updateLoanById(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> newInfo
+    ) {
+        Loan updatedLoan = service.updateLoanById(id, newInfo);
+
+        return ResponseEntity.ok().body(updatedLoan);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLoanById(@PathVariable Long id) {
+        try {
+            service.deleteLoanById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

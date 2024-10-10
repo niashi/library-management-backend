@@ -18,7 +18,7 @@ public class User {
     private Long id;
 
     private String name;
-    private Integer document;
+    private String document;
     private String email;
     private String phone;
     private String address;
@@ -32,7 +32,7 @@ public class User {
 
     public User(
             String name,
-            Integer document,
+            String document,
             String email,
             String phone,
             String address
@@ -56,11 +56,11 @@ public class User {
         this.name = name;
     }
 
-    public Integer getDocument() {
+    public String getDocument() {
         return document;
     }
 
-    public void setDocument(Integer document) {
+    public void setDocument(String document) {
         this.document = document;
     }
 

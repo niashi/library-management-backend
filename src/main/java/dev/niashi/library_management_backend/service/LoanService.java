@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -34,17 +36,38 @@ public class LoanService {
     }
 
     public Loan createLoan(Long userId, Long bookId, LocalDate returnDate) {
-        // Validations.
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("User not found" + userId));
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new NoSuchElementException("Book not found" + bookId));
 
         Loan loan = new Loan(user, book, returnDate);
 
         user.addLoan(loan);
 
         return loanRepository.save(loan);
+    }
+
+    public Loan updateLoanById(Long id, Map<String, Object> newInfo) {
+        Loan loan = getLoanById(id);
+
+        List<String> allowedFields = List.of("returnDate");
+
+        for (String key : newInfo.keySet()) {
+            if (!allowedFields.contains(key)) {
+                throw new IllegalArgumentException(key + ": not a valid field.");
+            }
+        }
+
+        loan.setReturnDate(LocalDate.parse((String) newInfo.get("returnDate")));
+
+        return loanRepository.save(loan);
+    }
+
+    public void deleteLoanById(Long id) {
+        Loan loan = getLoanById(id);
+
+        loanRepository.deleteById(loan.getId());
     }
 
 }
