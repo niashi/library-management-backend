@@ -19,4 +19,5 @@ To access full automatic documentation provided by Swagger UI, once the applicat
 
 - [ ] Adjust example values in Swagger UI;
 - [ ] Add more DTOs;
-- [ ] Adjust some responses.
+- [ ] Adjust some responses;
+- [ ] Implement tests.
