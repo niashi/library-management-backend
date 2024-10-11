@@ -3,6 +3,7 @@ package dev.niashi.library_management_backend.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,10 +18,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required.")
     private String name;
+
+    @NotBlank(message = "Document is required.")
     private String document;
+
     private String email;
+
+    @NotBlank(message = "Phone is required.")
     private String phone;
+
     private String address;
     private LocalDate registrationDate = LocalDate.now();
 

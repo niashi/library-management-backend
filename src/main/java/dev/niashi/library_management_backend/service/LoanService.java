@@ -26,9 +26,8 @@ public class LoanService {
     private BookRepository bookRepository;
 
     public Loan getLoanById(Long id) {
-        Optional<Loan> loan = loanRepository.findById(id);
-
-        return loan.get();
+        return loanRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Loan not found: " + id));
     }
 
     public List<Loan> getAllLoans() {
@@ -37,9 +36,9 @@ public class LoanService {
 
     public Loan createLoan(Long userId, Long bookId, LocalDate returnDate) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found" + userId));
+                .orElseThrow(() -> new NoSuchElementException("User not found: " + userId));
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new NoSuchElementException("Book not found" + bookId));
+                .orElseThrow(() -> new NoSuchElementException("Book not found: " + bookId));
 
         Loan loan = new Loan(user, book, returnDate);
 
@@ -57,9 +56,13 @@ public class LoanService {
             if (!allowedFields.contains(key)) {
                 throw new IllegalArgumentException(key + ": not a valid field.");
             }
-        }
 
-        loan.setReturnDate(LocalDate.parse((String) newInfo.get("returnDate")));
+            if (newInfo.get(key) != null) {
+                if (key.equals("returnDate")) {
+                    loan.setReturnDate(LocalDate.parse((String) newInfo.get("returnDate")));
+                }
+            }
+        }
 
         return loanRepository.save(loan);
     }

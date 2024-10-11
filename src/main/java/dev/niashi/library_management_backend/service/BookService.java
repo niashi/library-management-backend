@@ -17,9 +17,8 @@ public class BookService {
     private BookRepository repository;
 
     public Book getBookById(Long id) {
-        Optional<Book> book = repository.findById(id);
-
-        return book.get();
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Book not found: " + id));
     }
 
     public List<Book> getAllBooks() {
@@ -40,20 +39,15 @@ public class BookService {
                 throw new IllegalArgumentException(key + ": not a valid field.");
             }
 
-            if (newInfo.get(key) != null) {
-                switch (key) {
-                    case "title":
-                        book.setTitle((String) newInfo.get(key));
-                        break;
-                    case "author":
-                        book.setAuthor((String) newInfo.get(key));
-                        break;
-                }
+            switch (key) {
+                case "title":
+                    book.setTitle((String) newInfo.get(key));
+                    break;
+                case "author":
+                    book.setAuthor((String) newInfo.get(key));
+                    break;
             }
         }
-
-        book.setTitle((String) newInfo.get("title"));
-        book.setAuthor((String) newInfo.get("author"));
 
         return addBook(book);
     }

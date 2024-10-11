@@ -1,6 +1,8 @@
 package dev.niashi.library_management_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -14,13 +16,17 @@ public class Loan {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull(message = "User_id is required.")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @NotNull(message = "Book_id is required.")
     private Book book;
 
     private LocalDate loanDate = LocalDate.now();
+
+    @NotNull(message = "Return date is required.")
     private LocalDate returnDate;
 
     public Loan() {

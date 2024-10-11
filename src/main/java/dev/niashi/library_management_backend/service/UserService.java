@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -15,13 +16,10 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
-    @Autowired
-    private UserRepository userRepository;
 
     public User getUserById(Long id) {
-        Optional<User> user = repository.findById(id);
-
-        return user.get();
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found: " + id));
     }
 
     public List<User> getAllUsers() {
@@ -69,7 +67,7 @@ public class UserService {
             }
         }
 
-        return userRepository.save(user);
+        return addUser(user);
     }
 
     public void deleteUserById(Long id) {
