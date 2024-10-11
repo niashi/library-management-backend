@@ -13,7 +13,7 @@ transactions. CRUD operation of the entities `User`, `Book` and `Loan` are avail
 
 ## Documentation
 
-To access full automatic documentation provided by Swagger UI, simply head to: http://localhost:8080/swagger-ui.html.
+To access full automatic documentation provided by Swagger UI, once the application is started, simply head to: http://localhost:8080/swagger-ui.html.
 
 ## Future Improvements
 
